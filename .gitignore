@@ -1,0 +1,18 @@
+# Rust
+/target/
+Cargo.lock
+
+# Config files (keep example)
+config.toml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+

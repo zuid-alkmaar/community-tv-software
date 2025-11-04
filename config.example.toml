@@ -1,0 +1,10 @@
+# Community TV Software Configuration
+# Copy this file to config.toml and modify as needed
+
+# The URL to display in fullscreen mode
+url = "https://www.example.com"
+
+# Optional: Specify custom Chrome installation path
+# If not specified, the application will auto-detect Chrome
+# chrome_path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+
