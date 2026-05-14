@@ -1,14 +1,14 @@
 use clap::Parser;
-use std::process::Command;
-use std::path::PathBuf;
 use std::fs;
+use std::path::PathBuf;
+use std::process::Command;
 use std::thread;
 use std::time::Duration;
 
 #[cfg(windows)]
-use winapi::um::winuser::{FindWindowA, SetWindowPos, GetForegroundWindow, SetForegroundWindow};
-#[cfg(windows)]
 use winapi::shared::windef::HWND;
+#[cfg(windows)]
+use winapi::um::winuser::{FindWindowA, GetForegroundWindow, SetForegroundWindow, SetWindowPos};
 #[cfg(windows)]
 use winapi::um::winuser::{HWND_TOPMOST, SWP_NOMOVE, SWP_NOSIZE};
 
@@ -16,7 +16,7 @@ use winapi::um::winuser::{HWND_TOPMOST, SWP_NOMOVE, SWP_NOSIZE};
 #[command(author, version, about = "Community TV Software - Launch Chrome in fullscreen kiosk mode", long_about = None)]
 struct Args {
     /// URL to display in fullscreen
-    #[arg(short, long, default_value = "http://37.114.46.4")]
+    #[arg(short, long, default_value = "https://ctv.infra.overdieontmoet.org")]
     url: String,
 
     /// Path to Chrome executable (auto-detected if not specified)
@@ -63,10 +63,7 @@ fn find_chrome_window() -> Option<HWND> {
     use std::ffi::CString;
 
     // Try to find Chrome window by class name
-    let class_names = vec![
-        "Chrome_WidgetWin_1",
-        "Chrome_WidgetWin_0",
-    ];
+    let class_names = vec!["Chrome_WidgetWin_1", "Chrome_WidgetWin_0"];
 
     for class_name in class_names {
         if let Ok(c_str) = CString::new(class_name) {
@@ -85,15 +82,7 @@ fn find_chrome_window() -> Option<HWND> {
 #[cfg(windows)]
 fn set_window_always_on_top(hwnd: HWND) {
     unsafe {
-        SetWindowPos(
-            hwnd,
-            HWND_TOPMOST,
-            0,
-            0,
-            0,
-            0,
-            SWP_NOMOVE | SWP_NOSIZE,
-        );
+        SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
     }
 }
 
@@ -160,7 +149,7 @@ fn launch_chrome(url: &str, chrome_path: Option<String>) -> Result<(), Box<dyn s
         .arg("--no-default-browser-check");
 
     let child = cmd.spawn()?;
-    
+
     println!("Chrome launched successfully with PID: {}", child.id());
     println!("Press Alt+F4 or close the Chrome window to exit fullscreen mode.");
 
@@ -215,4 +204,3 @@ fn main() {
         }
     }
 }
-
